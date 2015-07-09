@@ -1,0 +1,33 @@
+disparadores tipos after.-comunmente se usa para automatizar tareas
+
+
+problemas:se desea reali9zar un backup en un sistema de base de datos en oracle.
+se tiene la tabla y se requiere que al guardar un usuario se generen 2 registros en las tablas siguientes
+
+se devera aplicar la siguiente regla:
+al insertar un usuario cuya edad sea menor de 18 años se debera ademas guardar en la tabla
+xxx_menores 
+si es mayor  o igual 18,deber guardarse ademas en la tabla xxx_mayores
+
+
+
+create table USUARIO_XXX(NOMBRE varchar2(120),
+EDAD integer
+);
+create table XXX_MENORES(NOMBRE varchar2(120),
+EDAD integer
+);
+create table XXX_MAYORES(NOMBRE varchar2(120),
+EDAD integer
+);
+
+create or replace trigger RESPALDO_XXX after 
+insert on USUARIO_XXX for each row ---each row garantiza que se va a disparar cada ves que se invoque 
+begin 
+if :NEW.EDAD <18 then
+  insert into XXX_MENORES values(:NEW.NOMBRE, :NEW.EDAD);
+else
+  insert into XXX_MAYORES values(:NEW.NOMBRE, :NEW.EDAD);
+end if;
+end;
+/
