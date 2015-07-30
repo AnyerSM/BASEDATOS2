@@ -4,11 +4,9 @@
  * and open the template in the editor.
  */
 package com.jc.model;
+import java.sql.*;
+import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author T-201
- */
 public class BuscarTodosProductos extends javax.swing.JFrame {
 
     /**
@@ -27,20 +25,20 @@ public class BuscarTodosProductos extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
+        botonBuscarProductos = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tablita = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText("Buscar todos los productos");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        botonBuscarProductos.setText("Buscar todos los productos");
+        botonBuscarProductos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                botonBuscarProductosActionPerformed(evt);
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tablita.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -51,7 +49,7 @@ public class BuscarTodosProductos extends javax.swing.JFrame {
                 "Id del producto", "Nombre del producto", "Costo del producto"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tablita);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -61,7 +59,7 @@ public class BuscarTodosProductos extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(31, 31, 31)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(botonBuscarProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -71,7 +69,7 @@ public class BuscarTodosProductos extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(22, 22, 22)
-                .addComponent(jButton1)
+                .addComponent(botonBuscarProductos)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(255, Short.MAX_VALUE))
@@ -80,11 +78,39 @@ public class BuscarTodosProductos extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void botonBuscarProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBuscarProductosActionPerformed
         // TODO add your handling code here:
         
-        
-    }//GEN-LAST:event_jButton1ActionPerformed
+       try{
+          //paso 1) establecer conexion a Oracle
+           Connection con=Conexion.conectarse();
+           //paso 2) crear un Statement (sentencia) de sql
+           Statement st=con.createStatement();
+           //paso 3) con el statement invocamos la consulta
+           ResultSet res=st.executeQuery("SELECT * FROM producto order by id_producto");
+          //paso 4) iteramos el ResultSet con un hermoso while 
+           int filas=0;
+           while(res.next()){
+               filas++;
+           } 
+           tablita.
+           setModel(new DefaultTableModel(new String[]
+                   {"id","nombre","precio"},filas)); 
+           int fila=0;
+           ResultSet res2=st.executeQuery("SELECT * FROM producto order by id_producto");
+           while(res2.next()){
+               Integer id= res2.getInt(1);
+               String nombre= res2.getString(2);
+               Float precio= res2.getFloat(3);
+               tablita.setValueAt(id, fila, 0);
+               tablita.setValueAt(nombre, fila, 1);
+               tablita.setValueAt(precio, fila, 2);
+               fila++;
+           }
+       }catch(Exception e){   
+     // System.out.println(e.getMessage());
+       } 
+    }//GEN-LAST:event_botonBuscarProductosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -122,8 +148,8 @@ public class BuscarTodosProductos extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton botonBuscarProductos;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tablita;
     // End of variables declaration//GEN-END:variables
 }
