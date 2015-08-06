@@ -1,1 +1,34 @@
+Problema: se tienen los datos de un trabajador y son nombre, a paterno,
+telefono 
+El trabajador tiene un sueldo base de 4000 pesos y se le desea hacer depositos de 4000 considerando
+las horas extras, cada hora extra se paga a 80 pesos:
 
+1) aplicar la normalizacion a este problema
+2) Crear un procedimiento para pagar la nomina, considerando el id del trabajador y las horas extras
+3) Crear un disparador que impida que se realice un deposito que no sea en los dias 28
+###########################################################################################################
+CREATE TABLE TRABAJADOR(
+ID_TRABAJADOR INTEGER,
+NOMBRE VARCHAR2(120),
+APATERNO VARCHAR2(120),
+TELEFONO INTEGER
+CONSTRAINT PK_ID_TRABAJADOR PRIMARY KEY (ID_TRABAJADOR));
+
+CREATE SEQUENCE SEC_TRABAJOS
+START WITH 1
+INCREMENT BY 1
+NOMAXVALUE;
+
+CREATE TABLE NOMINA(
+ID_NOMINA INTEGER,
+ID_TRABAJADOR INTEGER,
+SUELDO_BASE INTEGER,
+DEPOSITOS INTEGER,
+HORA_EXTRA INTEGER,
+CONSTRAINT PK_ID_NOMINA PRIMARY KEY (ID_NOMINA));
+CONSTRAINT FK_ID_TRABAJADOR FOREIGN KEY (ID_TRABAJADOR) REFERENCES TRABAJADOR(ID_TRABAJADOR);
+
+CREATE SEQUENCE SEC_NOMINA
+START WITH 1
+INCREMENT BY 1
+NOMAXVALUE;
